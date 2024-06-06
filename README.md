@@ -56,3 +56,4 @@ app/
 ## 3.1 client side
 ## 3.2 server side
 ## 3.3 Loading Components
+## 3.4 Parallel Requests
