@@ -48,3 +48,9 @@ app/
 - route group
 - (home) 처럼 괄호로 묶인 폴더는 url 생성하지 않음
 -- 논리적으로 파일 분류(그룹화)할 때 사용하면 좋음
+
+## 2.9 dynamic route
+/movies:id --> <Movies/>
+
+
+## 3.1 client side
