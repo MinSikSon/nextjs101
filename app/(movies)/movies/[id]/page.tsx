@@ -1,31 +1,17 @@
-import { API_URL } from "../../../(home)/page";
-
-
-async function getMovie(id: string) {
-    console.log(`Fetching movies:${Date.now()}`);
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    const res = await fetch(`${API_URL}/api/v1/tickers/${id}`);
-    return res.json();
-}
-
-async function getVideos(id: string) {
-    console.log(`Fetching videos:${Date.now()}`);
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    const res = await fetch(`${API_URL}/api/v1/tickers/${id}`);
-    return res.json();
-}
+import { Suspense } from "react";
+import MovieInfo from "../../../../components/movie-info";
+import MovieVideos from "../../../../components/movie-videos";
 
 export default async function MovieDetail({ params: { id } }: { params: { id: string } }) {
-    console.log(`----------------------------------------------------`);
-    console.log(`Start fetching`);
-    // const movie = await getMovie(id);
-    // const videos = await getVideos(id);
-    const [movie, videos] = await Promise.all([getMovie(id), getVideos(id)]); // NOTE: 병렬 fetch
-
+    // const [movie, videos] = await Promise.all([getMovie(id), getVideos(id)]); // NOTE: 병렬 fetch
+    const korId = decodeURIComponent(id);
     return <>
-        <h2>{decodeURIComponent(id)}</h2>
-        {/* <h2>{JSON.stringify(movie)}</h2> */}
-        <div>종가 : {movie.종가}</div>
-        <div>시총 : {movie.시가총액}</div>
+        <h2>{korId}</h2>
+        <Suspense fallback={<h1>Loading movie info</h1>}>
+            <MovieInfo id={korId} />
+        </Suspense>
+        <Suspense fallback={<h1>Loading movie videos</h1>}>
+            <MovieVideos id={korId} />
+        </Suspense>
     </>;
 }
