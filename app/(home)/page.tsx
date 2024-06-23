@@ -1,4 +1,6 @@
 import Link from "next/link";
+import StoreProvider from "../StoreProvider";
+import { useAppDispatch } from "../../lib/hooks";
 
 export const metadata = {
     title: 'Home',
@@ -15,12 +17,16 @@ async function getMovies() {
     const json = (await res).json();
     return json;
 }
-export default async function HomePage() {
+export default async function HomePage(props) {
     const movies = await getMovies();
+    console.log(`props`, props);
+
     return <>
-        {/* <h1>Hello NextJS 101!</h1> */}
-        {/* <div>{JSON.stringify(movies)}</div> */}
-        {movies.map((movie) => <li key={movie.corpCode}><Link href={`/movies/${movie.tickerName}`}>{movie.tickerName}</Link></li>)}
+        <StoreProvider>
+            {/* <h1>Hello NextJS 101!</h1> */}
+            {/* <div>{JSON.stringify(movies)}</div> */}
+            {movies.map((movie) => <li key={movie.corpCode}><Link href={`/movies/${movie.tickerName}`}>{movie.tickerName}</Link></li>)}
+        </StoreProvider>
     </>
 }
 
