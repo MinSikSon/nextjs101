@@ -1,14 +1,34 @@
-import { API_URL } from "../app/(home)/page";
+"use client";
 
-async function getMovie(id: string) {
-    console.log(`Fetching videos:${Date.now()}, id:${id}`);
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    const res = await fetch(`${API_URL}/api/v1/tickers/${id}`);
-    return res.json();
-}
+import { minus, plus, selectCount } from "@/lib/features/counter/counterSlice";
+import { selectName, setProductName } from "@/lib/features/product/productSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { ReactNode, useEffect, useState } from "react";
 
-export default async function MovieInfo({ id }: { id: string }) {
-    console.log(id);
-    const videos = await getMovie(id);
-    return <>{JSON.stringify(videos)}</>;
+export const MovieInfo = ({ id }: { id: string }) => {
+    // const dispatch = useAppDispatch();
+    // console.log(`[MovieInfo] dispatch`, dispatch);
+
+    const name: ReactNode = useAppSelector(selectName);
+    const count: ReactNode = useAppSelector(selectCount);
+    const dispatch = useAppDispatch();
+    // dispatch(setProductName(id));
+    const [movie, setMovie] = useState('');
+
+
+    useEffect(() => {
+        console.log(`[MovieInfo !!] id`, id);
+        dispatch(setProductName(id));
+        // setMovie(dispatch(setProductName(id)));
+    }, []);
+
+    // return <>{JSON.stringify(videos)}</>;
+    return <div>
+        <div className="bg-black">
+            <div>movieName : {name}</div>
+            <button onClick={() => { dispatch(plus()) }}>count 증가</button>
+            <button onClick={() => dispatch(minus())}>count 감소</button>
+        </div>
+        <div>count : {count}</div>
+    </div>;
 }

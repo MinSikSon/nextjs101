@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAppSlice } from "@/lib/createAppSlice";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 interface Count {
     value: number;
@@ -6,19 +7,24 @@ interface Count {
 const initialState: Count = {
     value: 0
 }
-const count = createSlice({
-    name: 'countReducer',
+export const counterSlice = createAppSlice({
+    name: "counter",
     initialState,
-    reducers: {
-        initializeCount: (state, action) => {
-            const { value } = action.payload;
-            state.value = value;
-        }
-        // add: (state, action) => {
-        //     state.push({ text: action.payload, id: Date.now() });
-        // },
-        // remove: (state, action) => state.filter(item => item.id !== action.payload),
+    reducers: (create) => ({
+        initializeCount: create.reducer((state, action: PayloadAction<number>) => {
+            state.value = action.payload;
+        }),
+        plus: create.reducer((state) => {
+            state.value += 1;
+        }),
+        minus: create.reducer((state) => {
+            state.value -= 1;
+        })
+    }),
+    selectors: {
+        selectCount: (counter) => counter.value,
     }
 })
 
-export const { initializeCount } = count.actions;
+export const { initializeCount, plus, minus } = counterSlice.actions;
+export const { selectCount } = counterSlice.selectors;
