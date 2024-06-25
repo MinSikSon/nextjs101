@@ -1,12 +1,13 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { fetchMovie } from "./productAPI";
 
 export interface Product {
-    name: any
+    state: string;
+    name: any;
 }
 const initialState: Product = {
-    name: ''
+    state: "",
+    name: []
 }
 export const productSlice = createAppSlice({
     name: 'product',
@@ -14,6 +15,7 @@ export const productSlice = createAppSlice({
     reducers: (create) => ({
         setProductName: create.asyncThunk(
             async (id: string) => {
+                console.log(`id`, id);
                 const response = await fetchMovie(id);
                 console.log(`[productSlice]`, response);
 
@@ -21,22 +23,24 @@ export const productSlice = createAppSlice({
             },
             {
                 pending: (state) => {
-                    state.name = "loading";
+                    state.state = "loading";
                 },
                 fulfilled: (state, action) => {
+                    state.state = "loaded";
                     console.log(`[productSlice] fulfilled`, action.payload);
                     state.name = JSON.stringify(action.payload);
                 },
                 rejected: (state) => {
-                    state.name = "failed";
+                    state.state = "failed";
                 },
             },
         )
     }),
     selectors: {
+        selectState: (product) => product.state,
         selectName: (product) => product.name,
     }
 });
 
 export const { setProductName } = productSlice.actions;
-export const { selectName } = productSlice.selectors;
+export const { selectState, selectName } = productSlice.selectors;

@@ -11,8 +11,7 @@ export default function StoreProvider({ children }: Props) {
     const storeRef = useRef<AppStore | null>(null);
 
     if (!storeRef.current) {
-        console.log(`[StoreProvider]`);
-        // Create the store instance the first time this renders
+        // console.log(`[StoreProvider]`);
         storeRef.current = makeStore();
     }
 

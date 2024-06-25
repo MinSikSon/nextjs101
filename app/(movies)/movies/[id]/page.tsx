@@ -1,15 +1,11 @@
 import { Suspense } from "react";
-import MovieVideos from "../../../../components/movie-videos";
-import { useAppDispatch } from "../../../../lib/hooks";
 import { MovieInfo } from "@/components/movie-info";
+import { MovieVideos } from "@/components/movie-videos";
 
 export default async function MovieDetail({ params: { id } }: { params: { id: string } }, ...props) {
     // const [movie, videos] = await Promise.all([getMovie(id), getVideos(id)]); // NOTE: 병렬 fetch
     const korId: string = decodeURIComponent(id);
-    console.log(`props`, props);
-
-    const dispatch = useAppDispatch;
-    console.log(`dispatch`, dispatch);
+    console.log(`korId`, korId);
     return <>
         <h2>{korId}</h2>
         <div>

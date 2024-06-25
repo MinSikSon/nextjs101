@@ -1,4 +1,9 @@
+"use client"
+
+import { initStockList, selectState, selectStock } from "@/lib/features/stock/stockSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
+import { useEffect } from "react";
 
 // export const metadata = {
 //     title: 'Home',
@@ -6,23 +11,24 @@ import Link from "next/link";
 // }
 
 export const API_URL = "https://idiotquant-backend.tofu89223.workers.dev";
-async function getMovies() {
-    console.log("im fetching");
-    // await new Promise((resolve) => setTimeout(resolve, 5000)); // NOTE: 의도적 5초 delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const res = fetch(`${API_URL}/stock/financial-info-ncav`);
-    const json = (await res).json();
-    return json;
-}
-export default async function HomePage(props) {
-    const movies = await getMovies();
-    console.log(`props`, props);
+export default function HomePage(props) {
+    // console.log(`[HomePage]`);
+    const stocks = useAppSelector(selectStock);
+    const state = useAppSelector(selectState);
+    const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        if ("" == state) {
+            dispatch(initStockList());
+        }
+    }, [])
+
+    // console.log(`[HomePage] stocks:`, stocks);
     return <>
         {/* <h1>Hello NextJS 101!</h1> */}
         {/* <div>{JSON.stringify(movies)}</div> */}
-        {movies.map((movie) => <li key={movie.corpCode}><Link href={`/movies/${movie.tickerName}`}>{movie.tickerName}</Link></li>)}
+        {stocks.map((stock, index) => <li key={index}><Link href={decodeURIComponent(`/movies/${stock.tickerName}`)}>{stock.tickerName}</Link></li>)}
     </>
 }
 
